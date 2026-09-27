@@ -1,0 +1,107 @@
+spring:
+  application:
+    name: board-game-rule-assistant
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/boardgames}
+    username: ${DATABASE_USER:boardgames}
+    password: ${DATABASE_PASSWORD:boardgames}
+    hikari:
+      maximum-pool-size: 10
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  servlet:
+    multipart:
+      # A phone photo of a rulebook page is comfortably under 25 MB; the request
+      # cap allows a whole 40-page rulebook in a single upload.
+      max-file-size: 25MB
+      max-request-size: 400MB
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+  mvc:
+    problemdetails:
+      enabled: false
+
+server:
+  port: 8080
+  # Rulebook uploads are large and slow on domestic upstream connections.
+  tomcat:
+    connection-timeout: 120s
+  compression:
+    enabled: true
+    mime-types: application/json,text/plain,text/css,text/javascript
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+groq:
+  # No default: an unset key must fail loudly rather than silently call nothing.
+  api-key: ${GROQ_API_KEY:}
+  base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+  # gpt-oss-120b is text-only, so page images go to a vision model instead.
+  text-model: ${GROQ_TEXT_MODEL:openai/gpt-oss-120b}
+  # Must accept image input. Verified against GET /models at startup.
+  vision-model: ${GROQ_VISION_MODEL:qwen/qwen3.8-27b}
+  # Writes the summary. Chosen over the text model in a side-by-side test of
+  # Hungarian quality; blank falls back to the text model.
+  summary-model: ${GROQ_SUMMARY_MODEL:qwen/qwen3.8-27b}
+  summary-reasoning-effort: ${GROQ_SUMMARY_REASONING_EFFORT:none}
+  reasoning-effort: ${GROQ_REASONING_EFFORT:low}
+  # Vision model accepts only none/default. "none" keeps the whole completion
+  # budget available for the transcription itself.
+  vision-reasoning-effort: ${GROQ_VISION_REASONING_EFFORT:none}
+  # Keeps the vision model chain-of-thought out of the page transcripts.
+  reasoning-format: ${GROQ_REASONING_FORMAT:hidden}
+  # Free tier ceiling, from the x-ratelimit-limit-tokens header. Groq counts
+  # max_completion_tokens against this at request time, so no single request may
+  # exceed it regardless of the model context window.
+  max-tokens-per-minute: ${GROQ_MAX_TOKENS_PER_MINUTE:8000}
+  # Completion budget per page; a page that runs out is re-read with the dense budget.
+  vision-max-tokens: ${GROQ_VISION_MAX_TOKENS:1000}
+  vision-max-tokens-dense: ${GROQ_VISION_MAX_TOKENS_DENSE:3500}
+  summary-notes-max-tokens: ${GROQ_SUMMARY_NOTES_MAX_TOKENS:2500}
+  answer-max-tokens: ${GROQ_ANSWER_MAX_TOKENS:1200}
+  timeout: 180s
+  # ~24 calls/minute, inside the free tier's 30 RPM org-wide ceiling.
+  min-call-interval: ${GROQ_MIN_CALL_INTERVAL:2500ms}
+  max-retries: ${GROQ_MAX_RETRIES:6}
+
+gemini:
+  # Optional. When set, Gemini writes the summary and Groq is the fallback.
+  api-key: ${GEMINI_API_KEY:}
+  # Tried in order when one is overloaded; comma-separated.
+  models: ${GEMINI_MODELS:gemini-3.8-flash,gemini-3.5-flash}
+
+tts:
+  base-url: ${TTS_BASE_URL:http://localhost:8200}
+  timeout: 5m
+  length-scale: ${TTS_LENGTH_SCALE:1.06}
+
+ingestion:
+  max-image-edge: ${INGESTION_MAX_IMAGE_EDGE:1600}
+  jpeg-quality: 0.8
+  thumbnail-edge: 640
+  max-pages-per-game: ${INGESTION_MAX_PAGES:80}
+  # ~55k tokens of rulebook, leaving ample room inside the 131k context window.
+  max-context-chars: 220000
+
+logging:
+  level:
+    io.rulesassistant.bgra: ${LOG_LEVEL:INFO}

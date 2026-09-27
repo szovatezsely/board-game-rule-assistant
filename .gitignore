@@ -1,0 +1,28 @@
+# Local secrets — never commit the Groq or Azure keys.
+.env
+.env.*
+!.env.example
+
+# Build output
+backend/build/
+backend/.gradle/
+backend/.kotlin/
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Python (TTS sidecar)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Logs
+*.log
+
+# Tooling noise
+.idea/
+.vscode/
+*.iml
+.DS_Store

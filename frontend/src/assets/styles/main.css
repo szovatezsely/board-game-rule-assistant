@@ -1,0 +1,510 @@
+/*
+ * Design system.
+ *
+ * A light, editorial look: white ground, near-black text, sharp corners,
+ * generous whitespace, and small uppercase labels in green doing the accent
+ * work. Green #00c95b is the primary and teal #20a575 carries links and
+ * secondary accents. Inter sets body copy at 18px/1.56, with Roboto Slab
+ * reserved for display type, and sections breathe on a 128px rhythm.
+ */
+
+:root {
+  /* Brand */
+  --color-primary: #00c95b;
+  --color-main: #20a575;
+  --color-primary-soft: rgba(0, 201, 91, 0.1);
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-offwhite: #e9e9e9;
+  --color-lightgray: #f5f6f7;
+  --color-mediumgray: #c5c5c5;
+  --color-gray: #737373;
+  --color-darkgray: #1f1f1f;
+  --color-black: #000000;
+  --color-error: #eb5757;
+  --color-warning: #e8a33d;
+
+  --bg-color-primary: var(--color-white);
+  --bg-color-placeholder: var(--color-lightgray);
+  --text-color-primary: var(--color-black);
+  --text-color-secondary: var(--color-gray);
+
+  /* Type */
+  --font-family-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-family-serif: 'Roboto Slab', Georgia, Cambria, serif;
+  --font-size: 18px;
+  --line-height: 1.56;
+
+  /* Rhythm */
+  --header-height: 100px;
+  --section-padding: 128px;
+  --section-padding-half: calc(var(--section-padding) / 2);
+  --content-max: 1320px;
+  --gutter: 40px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --section-padding: 72px;
+    --header-height: 76px;
+    --gutter: 20px;
+    --font-size: 17px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  color: var(--text-color-primary);
+  background: var(--bg-color-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding: var(--section-padding-half) 0;
+}
+
+/* ---------------------------------------------------------------- type */
+
+/*
+ * Display ramp. The top step is deliberately restrained — a hero heading that
+ * shouts crowds out the copy underneath it, which is the part that actually
+ * explains the app. Each step below stays clearly smaller than the one above so
+ * the hierarchy survives; see also `.prose h1, .prose h2`, which must sit below
+ * `.display--sm` because panel titles use that step.
+ */
+.display {
+  font-family: var(--font-family-serif);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+}
+
+.display--sm {
+  font-family: var(--font-family-serif);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* Small uppercase green label — the site's signature accent. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-main);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--color-primary);
+}
+
+.eyebrow--plain::before {
+  display: none;
+}
+
+.lead {
+  font-size: 1.16rem;
+  color: var(--text-color-secondary);
+  max-width: 62ch;
+}
+
+.muted {
+  color: var(--text-color-secondary);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 27px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+  border: 1px solid var(--color-offwhite);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-black);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-main);
+  color: var(--color-white);
+}
+
+.btn--dark {
+  background: var(--color-darkgray);
+  color: var(--color-white);
+}
+
+.btn--dark:hover:not(:disabled) {
+  background: var(--color-black);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-color-primary);
+  border-color: var(--color-mediumgray);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--color-black);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--color-error);
+  border-color: rgba(235, 87, 87, 0.4);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--color-white);
+  border-color: var(--color-error);
+}
+
+.btn--sm {
+  padding: 10px 18px;
+  font-size: 12px;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------- surfaces */
+
+.panel {
+  background: var(--color-white);
+  border: 1px solid var(--color-offwhite);
+}
+
+.panel--flat {
+  background: var(--color-lightgray);
+  border: none;
+}
+
+/* ---------------------------------------------------------------- forms */
+
+.field {
+  display: block;
+  margin-bottom: 22px;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+}
+
+.field__hint {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-color-primary);
+  background: var(--color-white);
+  border: 1px solid var(--color-mediumgray);
+  border-radius: 0;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 56px;
+  line-height: 1.5;
+}
+
+/* Visible focus ring for keyboard users, suppressed for mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- feedback */
+
+.alert {
+  padding: 16px 20px;
+  border-left: 3px solid var(--color-mediumgray);
+  background: var(--color-lightgray);
+  font-size: 0.95rem;
+}
+
+.alert--error {
+  border-left-color: var(--color-error);
+  background: rgba(235, 87, 87, 0.07);
+}
+
+.alert--warning {
+  border-left-color: var(--color-warning);
+  background: rgba(232, 163, 61, 0.09);
+}
+
+.alert--info {
+  border-left-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-mediumgray);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------- rendered markdown */
+
+/*
+ * Shared by the summary panel and the chat answers. Both contain
+ * model-generated Markdown, sanitised before it is inserted.
+ */
+.prose {
+  font-size: 1rem;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.prose h1,
+.prose h2 {
+  font-family: var(--font-family-serif);
+  /* Below .display--sm: these are headings inside a panel whose own title
+     already uses that step. */
+  font-size: 1.12rem;
+  font-weight: 500;
+  margin: 2em 0 0.6em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--color-offwhite);
+}
+
+.prose h3,
+.prose h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.6em 0 0.5em;
+}
+
+.prose p {
+  margin: 0 0 1em;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 1em;
+  padding-left: 1.3em;
+}
+
+.prose li {
+  margin-bottom: 0.4em;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose blockquote {
+  margin: 0 0 1em;
+  padding: 2px 0 2px 18px;
+  border-left: 3px solid var(--color-primary);
+  color: var(--text-color-secondary);
+  font-style: italic;
+}
+
+.prose code {
+  font-size: 0.9em;
+  padding: 2px 5px;
+  background: var(--color-lightgray);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  font-size: 0.92rem;
+}
+
+.prose th,
+.prose td {
+  padding: 8px 10px;
+  border: 1px solid var(--color-offwhite);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--color-lightgray);
+  font-weight: 600;
+}
+
+/* Wide tables scroll inside the panel rather than widening the page. */
+.prose--scroll-tables {
+  overflow-x: auto;
+}
+
+/* ---------------------------------------------------------------- utility */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+.gap-12 {
+  gap: 12px;
+}
+.gap-16 {
+  gap: 16px;
+}
+.gap-24 {
+  gap: 24px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

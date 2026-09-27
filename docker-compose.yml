@@ -1,0 +1,87 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-boardgames}
+      POSTGRES_USER: ${POSTGRES_USER:-boardgames}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-boardgames}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      # The backend runs Flyway on startup, so it must not connect before
+      # Postgres is genuinely accepting queries.
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-boardgames} -d ${POSTGRES_DB:-boardgames}']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  tts:
+    build:
+      context: ./tts
+    environment:
+      PIPER_MODEL: /models/hu_HU-anna-medium.onnx
+      # Optional. With a key, narration uses Gemini TTS, with Piper as fallback.
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_TTS_MODEL: ${GEMINI_TTS_MODEL:-gemini-3.8-flash-tts}
+      GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-Kore}
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://localhost:8200/health || exit 1']
+      interval: 15s
+      timeout: 5s
+      # The ONNX voice takes a few seconds to load on first start.
+      start_period: 30s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      # Published so `npm run dev` can proxy to it during frontend development,
+      # and so the API can be exercised directly with curl.
+      - '${BACKEND_PORT:-8080}:8080'
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-boardgames}
+      DATABASE_USER: ${POSTGRES_USER:-boardgames}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-boardgames}
+      TTS_BASE_URL: http://tts:8200
+      # Required. Get a free key at https://console.groq.com/keys
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      # Optional. Free key at https://aistudio.google.com/apikey
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODELS: ${GEMINI_MODELS:-gemini-3.8-flash,gemini-3.5-flash}
+      GROQ_TEXT_MODEL: ${GROQ_TEXT_MODEL:-openai/gpt-oss-120b}
+      GROQ_VISION_MODEL: ${GROQ_VISION_MODEL:-qwen/qwen3.8-27b}
+      GROQ_SUMMARY_MODEL: ${GROQ_SUMMARY_MODEL:-qwen/qwen3.8-27b}
+      GROQ_SUMMARY_REASONING_EFFORT: ${GROQ_SUMMARY_REASONING_EFFORT:-none}
+      GROQ_REASONING_EFFORT: ${GROQ_REASONING_EFFORT:-low}
+      GROQ_VISION_REASONING_EFFORT: ${GROQ_VISION_REASONING_EFFORT:-none}
+      GROQ_REASONING_FORMAT: ${GROQ_REASONING_FORMAT:-hidden}
+      GROQ_MAX_TOKENS_PER_MINUTE: ${GROQ_MAX_TOKENS_PER_MINUTE:-8000}
+      GROQ_VISION_MAX_TOKENS: ${GROQ_VISION_MAX_TOKENS:-1000}
+      GROQ_VISION_MAX_TOKENS_DENSE: ${GROQ_VISION_MAX_TOKENS_DENSE:-3500}
+      GROQ_MIN_CALL_INTERVAL: ${GROQ_MIN_CALL_INTERVAL:-2500ms}
+      TTS_LENGTH_SCALE: ${TTS_LENGTH_SCALE:-1.06}
+      INGESTION_MAX_PAGES: ${INGESTION_MAX_PAGES:-80}
+      INGESTION_MAX_IMAGE_EDGE: ${INGESTION_MAX_IMAGE_EDGE:-1600}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      db:
+        condition: service_healthy
+      tts:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - '${APP_PORT:-8081}:80'
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  db-data:
