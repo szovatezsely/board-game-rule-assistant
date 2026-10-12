@@ -440,12 +440,14 @@ Every value below is optional except `GROQ_API_KEY`; see `.env.example`.
 
 ## Styling
 
-A light, editorial design system: `#00c95b` primary green with `#20a575` for
-links and secondary accents, Inter for body text and Roboto Slab for display
-type, an 18px/1.56 base, sharp-cornered surfaces, generous whitespace on a 128px
-section rhythm, and small uppercase green labels carrying the accent work. The
-tokens all live at the top of `frontend/src/assets/styles/main.css`, so
-retheming means editing one block.
+A dark, high-contrast design, a near-black
+ground (`#0a0a0b`), layered charcoal surfaces separated by hairlines, a single
+`#00c95b` green accent, light Roboto Slab display type over Inter body copy,
+rounded panels and pill-shaped buttons. The tokens all live at the top of
+`frontend/src/assets/styles/main.css`, so retheming means editing one block.
+
+The favicon (`frontend/public/favicon.svg`) is a green die, which also serves as
+the mark beside the wordmark in the header.
 
 Fonts are bundled rather than loaded from a CDN, and only the latin and latin-ext
 subsets are included — latin-ext is what carries the Hungarian **ő** and **ű**.

@@ -24,6 +24,10 @@ const progressPercent = computed(() =>
   duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0,
 )
 
+// Feeds the green fill of the seek bar's track (bound in the CSS below);
+// WebKit has no ::range-progress pseudo-element to do it natively.
+const seekFill = computed(() => `${progressPercent.value}%`)
+
 // Drop the trailing zero so normal speed reads "1×" rather than "1.0×".
 const rateLabel = computed(() => String(rate.value))
 
@@ -191,10 +195,10 @@ onBeforeUnmount(() => audio.value?.pause())
 
 <style scoped>
 .summary {
-  padding: 36px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 22px;
 }
 
 .summary__head {
@@ -204,38 +208,46 @@ onBeforeUnmount(() => audio.value?.pause())
 }
 
 .summary__title {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .player {
   display: flex;
-  align-items: stretch;
-  gap: 20px;
-  padding: 22px;
-  background: var(--color-darkgray);
-  color: var(--color-white);
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-alt);
 }
 
 .player__play {
-  width: 62px;
-  height: 62px;
+  width: 56px;
+  height: 56px;
   flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   border: none;
-  background: var(--color-primary);
-  color: var(--color-black);
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--green-ink);
   font-size: 1rem;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(0, 201, 91, 0.45);
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .player__play:hover:not(:disabled) {
-  background: var(--color-white);
+  background: var(--green-bright);
+  transform: scale(1.05);
 }
 
+/* A soft halo while the narration plays. */
 .player__play--active {
-  background: var(--color-white);
+  background: var(--text);
+  box-shadow: 0 0 0 6px rgba(0, 201, 91, 0.18);
 }
 
 .player__play:disabled {
@@ -244,8 +256,8 @@ onBeforeUnmount(() => audio.value?.pause())
 }
 
 .spinner--light {
-  border-color: rgba(0, 0, 0, 0.25);
-  border-top-color: var(--color-black);
+  border-color: rgba(0, 46, 29, 0.3);
+  border-top-color: var(--green-ink);
 }
 
 .player__body {
@@ -253,60 +265,110 @@ onBeforeUnmount(() => audio.value?.pause())
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .player__status {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+  color: var(--text-dim);
 }
 
+/* The seek bar: a thin rounded track filled in green up to the playhead. */
 .player__seek {
+  --fill: v-bind(seekFill);
   width: 100%;
-  accent-color: var(--color-primary);
+  height: 18px;
+  margin: 0;
+  background: transparent;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.player__seek::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--green) 0,
+    var(--green) var(--fill),
+    var(--line-strong) var(--fill)
+  );
+}
+
+.player__seek::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.player__seek::-moz-range-progress {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.player__seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 0;
+}
+
+.player__seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 0;
 }
 
 .player__seek:disabled {
   cursor: default;
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
 .player__meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .player__time {
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--text-faint);
 }
 
 .player__controls {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .player__chip {
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-white);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text-dim);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  transition: border-color 0.2s ease, color 0.2s ease;
+  border: 1px solid var(--line);
+  transition:
+    border-color var(--transition),
+    color var(--transition),
+    background var(--transition);
 }
 
 .player__chip:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--line-strong);
+  background: var(--surface-hover);
+  color: var(--text);
 }
 
 .player__chip:disabled {
@@ -319,18 +381,22 @@ onBeforeUnmount(() => audio.value?.pause())
 }
 
 .summary__text {
-  border-top: 1px solid var(--color-offwhite);
-  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
 }
 
 @media (max-width: 700px) {
   .summary {
-    padding: 24px 20px;
+    padding: 22px 18px;
   }
 
   .player {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+
+  .player__play {
+    align-self: flex-start;
   }
 }
 </style>

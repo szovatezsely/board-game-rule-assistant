@@ -158,7 +158,7 @@ onUnmounted(() => store.stopDetailPolling())
       <p v-if="actionError" class="alert alert--error game__alert">{{ actionError }}</p>
 
       <section v-if="busy" class="game__progress panel panel--flat">
-        <span class="eyebrow">Feldolgozás</span>
+        <span class="eyebrow eyebrow--accent">Feldolgozás</span>
         <p class="game__progress-text">
           A szabálykönyv oldalait egyenként olvassuk be, majd elkészül a magyar
           összefoglaló. Az ingyenes Groq keret miatt egy oldal nagyjából fél percig
@@ -191,21 +191,30 @@ onUnmounted(() => store.stopDetailPolling())
 
 <style scoped>
 .game {
-  padding-top: 44px;
+  padding-top: 32px;
 }
 
 .game__back {
-  display: inline-block;
-  margin-bottom: 32px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 6px 14px 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
 }
 
 .game__back:hover {
-  color: var(--color-black);
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: var(--surface-hover);
 }
 
 .game__loading {
@@ -219,47 +228,44 @@ onUnmounted(() => store.stopDetailPolling())
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 32px;
-  padding-bottom: 36px;
-  border-bottom: 1px solid var(--color-offwhite);
+  gap: 28px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--line);
   flex-wrap: wrap;
 }
 
 .game__headings {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   min-width: 0;
 }
 
-.game__badges {
-  margin-bottom: 2px;
-}
-
 .game__title {
-  /* Just under the hero step, since a game name can be long. */
-  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  /* A step under the hero, since a game name can be long. */
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
   word-break: break-word;
 }
 
 .game__timestamp {
   margin: 0;
   font-size: 0.84rem;
+  color: var(--text-faint);
 }
 
 .game__actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .game__alert {
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .game__progress {
-  margin-top: 36px;
-  padding: 30px;
+  margin-top: 28px;
+  padding: 26px 28px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -268,28 +274,29 @@ onUnmounted(() => store.stopDetailPolling())
 .game__progress-text {
   margin: 0;
   font-size: 0.92rem;
-  color: var(--text-color-secondary);
+  color: var(--text-dim);
 }
 
 .game__failed {
-  margin-top: 36px;
+  margin-top: 28px;
 }
 
 .game__failed-text {
   margin: 8px 0 0;
+  color: var(--text);
 }
 
 .game__failed-hint {
   margin: 8px 0 0;
   font-size: 0.85rem;
-  color: var(--text-color-secondary);
+  color: var(--text-dim);
 }
 
 .game__layout {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 32px;
-  margin-top: 44px;
+  gap: 24px;
+  margin-top: 32px;
   align-items: start;
 }
 

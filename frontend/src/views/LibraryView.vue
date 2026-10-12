@@ -42,10 +42,10 @@ onUnmounted(() => store.stopLibraryPolling())
   <div>
     <section class="hero">
       <div class="container hero__inner">
-        <span class="eyebrow">Társasjáték-szabály asszisztens</span>
+        <span class="eyebrow eyebrow--accent">Beolvasás · felolvasás · kérdések</span>
         <h1 class="display hero__title">
           Fotózd le a szabálykönyvet.<br />
-          Hallgasd meg, és kérdezz róla.
+          <span class="accent">Hallgasd meg,</span> és kérdezz róla.
         </h1>
         <p class="lead hero__lead">
           Töltsd fel a szabálykönyv oldalainak fotóit. Az alkalmazás kiolvassa a
@@ -58,10 +58,14 @@ onUnmounted(() => store.stopLibraryPolling())
           <button type="button" class="btn btn--primary" @click="openUpload">
             Új szabálykönyv hozzáadása
           </button>
-          <div v-if="store.games.length" class="hero__stats">
-            <span><strong>{{ readyCount }}</strong> feldolgozott játék</span>
-            <span v-if="busyCount">
-              <strong>{{ busyCount }}</strong> feldolgozás alatt
+          <div v-if="store.games.length" class="stats">
+            <span class="stats__item">
+              <span class="stats__value">{{ readyCount }}</span>
+              <span class="stats__label">feldolgozott játék</span>
+            </span>
+            <span v-if="busyCount" class="stats__item stats__item--busy">
+              <span class="stats__value">{{ busyCount }}</span>
+              <span class="stats__label">feldolgozás alatt</span>
             </span>
           </div>
         </div>
@@ -95,7 +99,8 @@ onUnmounted(() => store.stopLibraryPolling())
         <span class="muted">Könyvtár betöltése…</span>
       </div>
 
-      <div v-else-if="!store.games.length" class="library__empty panel panel--flat">
+      <div v-else-if="!store.games.length" class="library__empty panel">
+        <img class="library__empty-mark" src="/favicon.svg" alt="" width="40" height="40" />
         <p class="library__empty-title">Még nincs egyetlen szabálykönyv sem.</p>
         <p class="muted library__empty-text">
           Kezdd azzal, hogy lefotózod egy szabálykönyv oldalait, és feltöltöd őket.
@@ -111,21 +116,35 @@ onUnmounted(() => store.stopLibraryPolling())
 
 <style scoped>
 .hero {
-  padding: var(--section-padding-half) 0 var(--section-padding-half);
-  border-bottom: 1px solid var(--color-offwhite);
+  position: relative;
+  padding: 72px 0 56px;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+/* A faint green glow behind the headline, the only decoration on the page. */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -180px;
+  left: -120px;
+  width: 620px;
+  height: 420px;
+  background: radial-gradient(closest-side, rgba(0, 201, 91, 0.12), transparent);
+  pointer-events: none;
 }
 
 .hero__inner {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 20px;
   align-items: flex-start;
 }
 
+/* Wide enough that each sentence keeps to its own line on desktop. */
 .hero__title {
-  /* Widened along with the smaller type so each sentence keeps to one line
-     instead of fragmenting across four. */
-  max-width: 32ch;
+  max-width: 30ch;
 }
 
 .hero__lead {
@@ -135,30 +154,56 @@ onUnmounted(() => store.stopLibraryPolling())
 .hero__actions {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 18px 28px;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
-.hero__stats {
+/* A thin pill strip, as the score bar on Clue Trainer. */
+.stats {
   display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  font-size: 0.86rem;
-  color: var(--text-color-secondary);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
 }
 
-.hero__stats strong {
-  color: var(--text-color-primary);
+.stats__item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 20px;
+}
+
+.stats__item + .stats__item {
+  border-left: 1px solid var(--line);
+}
+
+.stats__value {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--green-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__item--busy .stats__value {
+  color: var(--amber);
+}
+
+.stats__label {
+  font-size: 0.66rem;
   font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 .upload-wrap {
-  padding-top: var(--section-padding-half);
+  padding-top: 48px;
 }
 
 .library {
-  padding-top: var(--section-padding-half);
+  padding-top: 56px;
 }
 
 .library__head {
@@ -166,7 +211,7 @@ onUnmounted(() => store.stopLibraryPolling())
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 36px;
+  margin-bottom: 28px;
 }
 
 .library__title {
@@ -181,14 +226,24 @@ onUnmounted(() => store.stopLibraryPolling())
 }
 
 .library__empty {
-  padding: 56px 40px;
+  padding: 56px 32px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-style: dashed;
+}
+
+.library__empty-mark {
+  margin-bottom: 18px;
+  opacity: 0.9;
 }
 
 .library__empty-title {
   margin: 0 0 8px;
-  font-family: var(--font-family-serif);
-  font-size: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 300;
 }
 
 .library__empty-text {
@@ -198,11 +253,15 @@ onUnmounted(() => store.stopLibraryPolling())
 
 .library__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
 }
 
 @media (max-width: 640px) {
+  .hero {
+    padding: 44px 0 36px;
+  }
+
   .library__grid {
     grid-template-columns: 1fr;
   }

@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <section class="container notfound">
-    <span class="eyebrow">404</span>
+    <span class="eyebrow eyebrow--accent">404</span>
     <h1 class="display notfound__title">Ez az oldal nem található.</h1>
     <p class="lead">
       Elképzelhető, hogy a keresett szabálykönyvet törölték, vagy elírás van a
@@ -18,7 +18,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .notfound {
-  padding: var(--section-padding) 0;
+  padding: 96px var(--gutter);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

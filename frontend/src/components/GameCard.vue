@@ -62,22 +62,37 @@ const pageLabel = computed(() =>
 .card {
   display: flex;
   flex-direction: column;
-  background: var(--color-white);
-  border: 1px solid var(--color-offwhite);
-  transition: border-color 0.25s ease, transform 0.25s ease;
   height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .card:hover {
-  border-color: var(--color-primary);
+  border-color: var(--green-line);
   transform: translateY(-3px);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(0, 201, 91, 0.08);
 }
 
 .card__media {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: var(--color-lightgray);
+  background: var(--surface-alt);
+}
+
+/* The cover fades into the card, so photos of any brightness sit calmly. */
+.card__media::after {
+  content: '';
+  position: absolute;
+  inset: 55% 0 0 0;
+  background: linear-gradient(to bottom, transparent, var(--surface));
+  pointer-events: none;
 }
 
 .card__image {
@@ -96,27 +111,30 @@ const pageLabel = computed(() =>
   align-items: center;
   justify-content: center;
   height: 100%;
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-mediumgray);
+  color: var(--text-faint);
 }
 
 .card__badge {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 1;
 }
 
 .card__body {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 22px;
+  gap: 12px;
+  padding: 6px 20px 20px;
   flex: 1;
 }
 
 .card__title {
+  color: var(--text);
   /* Two lines max so cards in a row keep a consistent height. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -128,19 +146,19 @@ const pageLabel = computed(() =>
 .card__meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .card__date {
-  font-size: 0.8rem;
-  color: var(--text-color-secondary);
+  font-size: 0.78rem;
+  color: var(--text-faint);
 }
 
 .card__error {
   margin: auto 0 0;
-  font-size: 0.85rem;
-  color: var(--color-error);
+  font-size: 0.84rem;
+  color: var(--red);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -150,14 +168,29 @@ const pageLabel = computed(() =>
 
 .card__ready {
   margin: auto 0 0;
-  font-size: 0.85rem;
-  color: var(--color-main);
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.84rem;
+  color: var(--text-dim);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  transition: color var(--transition);
+}
+
+.card:hover .card__ready {
+  color: var(--text);
 }
 
 .card__ready-icon {
-  font-size: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.55rem;
+  background: var(--green);
+  color: var(--green-ink);
+  flex: none;
 }
 </style>

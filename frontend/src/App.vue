@@ -27,7 +27,7 @@ onMounted(() => store.loadServiceStatus())
             <code>GROQ_API_KEY</code> értékét a <code>.env</code> fájlban, majd
             indítsd újra a szolgáltatást. Ingyenes kulcs igényelhető a
             <a
-              class="app__link"
+              class="link"
               href="https://console.groq.com/keys"
               target="_blank"
               rel="noopener noreferrer"
@@ -78,15 +78,9 @@ onMounted(() => store.loadServiceStatus())
 
 .app__main {
   flex: 1;
-  padding-top: var(--header-height);
 }
 
 .app__banner {
-  padding-top: 28px;
-}
-
-.app__link {
-  color: var(--color-main);
-  text-decoration: underline;
+  padding-top: 24px;
 }
 </style>

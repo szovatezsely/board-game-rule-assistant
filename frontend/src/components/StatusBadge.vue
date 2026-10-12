@@ -29,14 +29,16 @@ const tone = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  height: 26px;
-  padding: 0 10px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
   border: 1px solid;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
   white-space: nowrap;
+  /* Legible on top of a cover photo as well as on a plain surface. */
+  backdrop-filter: blur(8px);
 }
 
 .badge__dot {
@@ -48,20 +50,31 @@ const tone = computed(() => {
 }
 
 .badge--ready {
-  color: var(--color-main);
-  border-color: rgba(32, 165, 117, 0.35);
-  background: var(--color-primary-soft);
+  color: var(--green-bright);
+  border-color: var(--green-line);
+  background: rgba(0, 46, 29, 0.72);
 }
 
 .badge--failed {
-  color: var(--color-error);
-  border-color: rgba(235, 87, 87, 0.35);
-  background: rgba(235, 87, 87, 0.07);
+  color: var(--red);
+  border-color: var(--red-line);
+  background: rgba(46, 10, 10, 0.72);
 }
 
 .badge--busy {
-  color: var(--color-gray);
-  border-color: var(--color-offwhite);
-  background: var(--color-lightgray);
+  color: var(--amber);
+  border-color: var(--amber-line);
+  background: rgba(40, 28, 6, 0.72);
+}
+
+/* A pulsing dot says "still working" without another spinner. */
+.badge--busy .badge__dot {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
 }
 </style>

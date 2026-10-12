@@ -5,8 +5,14 @@ import { RouterLink } from 'vue-router'
 <template>
   <header class="header">
     <div class="container header__inner">
-      <RouterLink to="/" class="header__brand" aria-label="Kezdőlap">
-        <span class="header__wordmark">Társasjáték - Szabály Asszisztens</span>
+      <RouterLink to="/" class="header__brand" aria-label="Társasjáték-szabály asszisztens, kezdőlap">
+        <img class="header__mark" src="/favicon.svg" alt="" width="28" height="28" />
+        <span class="header__wordmark">
+          <span class="header__wordmark-long">társasjáték-</span>szabály asszisztens<span
+            class="header__dot"
+            >.</span
+          >
+        </span>
       </RouterLink>
 
       <nav class="header__nav" aria-label="Fő navigáció">
@@ -18,13 +24,13 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .header {
-  position: fixed;
-  inset: 0 0 auto 0;
+  position: sticky;
+  top: 0;
   z-index: 50;
   height: var(--header-height);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-offwhite);
+  background: rgba(10, 10, 11, 0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
 }
 
 .header__inner {
@@ -42,62 +48,75 @@ import { RouterLink } from 'vue-router'
   min-width: 0;
 }
 
+.header__mark {
+  flex: none;
+  transition: transform var(--transition);
+}
+
+.header__brand:hover .header__mark {
+  transform: rotate(-8deg);
+}
+
 .header__wordmark {
-  font-family: var(--font-family-serif);
-  /* Scales down on narrow screens so the full name keeps its single line
-     alongside the nav rather than wrapping or being clipped. */
-  font-size: clamp(0.95rem, 3.2vw, 1.45rem);
-  font-weight: 500;
-  font-variant-caps: small-caps;
-  /* Small caps need positive tracking to breathe — the tight negative value
-     used for display type closes them up into a solid block. */
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header__dot {
+  color: var(--green);
 }
 
 .header__nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 8px;
 }
 
 .header__link {
-  position: relative;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-color-secondary);
-  transition: color 0.2s ease;
-  padding: 4px 0;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition:
+    color var(--transition),
+    background var(--transition),
+    border-color var(--transition);
 }
 
-.header__link:hover,
+.header__link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
 .header__link.router-link-exact-active {
-  color: var(--text-color-primary);
-}
-
-.header__link.router-link-exact-active::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 2px;
-  background: var(--color-primary);
-}
-
-@media (max-width: 620px) {
-  .header__nav {
-    gap: 18px;
-  }
+  color: var(--text);
+  border-color: var(--line);
+  background: var(--surface);
 }
 
 /*
- * Below this width the full product name and the nav compete for the same
- * pixels and collide. The only nav item points at "/", which the brand already
- * links to, so hiding it costs no navigation at all and leaves the name room to
- * stay on one line.
+ * The full name and the nav compete for the same pixels on a phone. The
+ * "társasjáték-" prefix goes first, then the nav (its only item points at "/",
+ * which the brand already links to), so the name never wraps or overflows.
  */
-@media (max-width: 470px) {
+@media (max-width: 640px) {
+  .header__wordmark-long {
+    display: none;
+  }
+
+  .header__wordmark {
+    font-size: 1.12rem;
+  }
+}
+
+@media (max-width: 400px) {
   .header__nav {
     display: none;
   }

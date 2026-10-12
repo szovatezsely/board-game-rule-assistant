@@ -27,14 +27,17 @@ const props = defineProps<{
 
 <style scoped>
 .progress__track {
-  height: 3px;
-  background: var(--color-offwhite);
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-hover);
   overflow: hidden;
 }
 
 .progress__fill {
   height: 100%;
-  background: var(--color-primary);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green), var(--green-bright));
+  box-shadow: 0 0 12px rgba(0, 201, 91, 0.45);
   transition: width 0.5s ease;
 }
 
@@ -44,13 +47,14 @@ const props = defineProps<{
   gap: 10px;
   margin-top: 12px;
   font-size: 0.82rem;
-  color: var(--text-color-secondary);
+  color: var(--text-dim);
 }
 
 .progress__percent {
   margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
   font-variant-numeric: tabular-nums;
-  color: var(--text-color-primary);
-  font-weight: 600;
+  color: var(--text);
 }
 </style>

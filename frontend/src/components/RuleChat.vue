@@ -199,12 +199,12 @@ onMounted(loadHistory)
 .chat {
   display: flex;
   flex-direction: column;
-  padding: 36px;
-  gap: 20px;
+  padding: 26px;
+  gap: 18px;
   /* Sits beside the summary on desktop; the log scrolls inside this height. */
-  max-height: calc(100vh - var(--header-height) - 80px);
+  max-height: calc(100vh - var(--header-height) - 48px);
   position: sticky;
-  top: calc(var(--header-height) + 40px);
+  top: calc(var(--header-height) + 24px);
 }
 
 .chat__head {
@@ -215,12 +215,12 @@ onMounted(loadHistory)
 }
 
 .chat__title {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .chat__disclaimer {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 .chat__log {
@@ -229,14 +229,14 @@ onMounted(loadHistory)
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   padding-right: 6px;
 }
 
 .chat__empty {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .chat__empty-text {
@@ -246,48 +246,53 @@ onMounted(loadHistory)
 
 .chat__examples {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
-  align-items: flex-start;
 }
 
 .chat__example {
   text-align: left;
-  padding: 9px 14px;
-  font-size: 0.86rem;
-  color: var(--text-color-primary);
-  background: var(--color-lightgray);
-  border: 1px solid transparent;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    color var(--transition);
 }
 
 .chat__example:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
+  border-color: var(--green-line);
+  background: var(--green-veil);
+  color: var(--text);
 }
 
 .chat__example:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .bubble {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
 }
 
 .bubble__role {
-  font-size: 10px;
+  font-size: 0.64rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-color-secondary);
+  color: var(--text-faint);
 }
 
 .bubble__body {
-  font-size: 0.94rem;
-  padding: 14px 16px;
+  font-size: 0.93rem;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
 }
 
 .bubble__body--plain {
@@ -300,25 +305,30 @@ onMounted(loadHistory)
 }
 
 .bubble--user .bubble__body {
-  background: var(--color-darkgray);
-  color: var(--color-white);
   max-width: 88%;
+  background: var(--green-veil);
+  border: 1px solid var(--green-line);
+  color: var(--text);
+  border-bottom-right-radius: 4px;
 }
 
 .bubble--assistant .bubble__body {
-  background: var(--color-lightgray);
-  border-left: 3px solid var(--color-primary);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--green);
+  border-bottom-left-radius: 4px;
 }
 
 .bubble__thinking {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 16px;
-  background: var(--color-lightgray);
-  border-left: 3px solid var(--color-mediumgray);
-  font-size: 0.9rem;
-  color: var(--text-color-secondary);
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-alt);
+  border: 1px dashed var(--line-strong);
+  font-size: 0.88rem;
+  color: var(--text-dim);
 }
 
 .chat__error {
@@ -328,9 +338,9 @@ onMounted(loadHistory)
 .chat__form {
   display: flex;
   align-items: flex-end;
-  gap: 12px;
-  border-top: 1px solid var(--color-offwhite);
-  padding-top: 20px;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
 }
 
 .chat__form .textarea {
@@ -350,7 +360,7 @@ onMounted(loadHistory)
 
 @media (max-width: 700px) {
   .chat {
-    padding: 24px 20px;
+    padding: 22px 18px;
   }
 
   .chat__form {

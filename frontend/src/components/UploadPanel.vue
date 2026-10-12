@@ -101,7 +101,7 @@ async function submit() {
 <template>
   <section class="upload panel" aria-labelledby="upload-heading">
     <div class="upload__head">
-      <span class="eyebrow">Új szabálykönyv</span>
+      <span class="eyebrow eyebrow--accent">Új szabálykönyv</span>
       <h2 id="upload-heading" class="display--sm">Töltsd fel a szabálykönyv oldalait</h2>
       <p class="lead upload__lead">
         Fotózd le a szabálykönyv minden oldalát, majd add meg őket egyszerre. Az
@@ -127,8 +127,13 @@ async function submit() {
         multiple
         @change="addFiles(($event.target as HTMLInputElement).files)"
       />
+      <span class="dropzone__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
+        </svg>
+      </span>
       <p class="dropzone__title">Húzd ide a képeket, vagy</p>
-      <label for="rulebook-files" class="btn btn--dark btn--sm dropzone__button">
+      <label for="rulebook-files" class="btn btn--sm dropzone__button">
         Képek kiválasztása
       </label>
       <p class="dropzone__hint">JPG vagy PNG, oldalanként egy kép</p>
@@ -141,7 +146,7 @@ async function submit() {
 
     <div v-if="files.length" class="filelist">
       <div class="filelist__head">
-        <span class="eyebrow eyebrow--plain">
+        <span class="eyebrow">
           {{ files.length }} oldal · {{ totalSizeMb.toFixed(1) }} MB
         </span>
         <div class="filelist__actions">
@@ -229,10 +234,10 @@ async function submit() {
 
 <style scoped>
 .upload {
-  padding: 40px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 }
 
 .upload__head {
@@ -242,7 +247,7 @@ async function submit() {
 }
 
 .upload__lead {
-  font-size: 1rem;
+  font-size: 0.98rem;
   margin: 0;
 }
 
@@ -250,22 +255,39 @@ async function submit() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 48px 24px;
+  gap: 12px;
+  padding: 40px 24px;
   text-align: center;
-  border: 1px dashed var(--color-mediumgray);
-  background: var(--color-lightgray);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-alt);
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
 }
 
 .dropzone--active {
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
+  border-color: var(--green);
+  background: var(--green-veil);
+  box-shadow: 0 0 0 4px rgba(0, 201, 91, 0.1);
+}
+
+.dropzone__icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green-veil);
+  border: 1px solid var(--green-line);
+  color: var(--green-bright);
 }
 
 .dropzone__title {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.98rem;
+  color: var(--text);
 }
 
 .dropzone__button {
@@ -274,17 +296,20 @@ async function submit() {
 
 .dropzone__hint {
   margin: 0;
-  font-size: 0.82rem;
-  color: var(--text-color-secondary);
+  font-size: 0.8rem;
+  color: var(--text-faint);
 }
 
 .dropzone__hint--tip {
-  max-width: 52ch;
+  max-width: 54ch;
   line-height: 1.5;
+  color: var(--text-dim);
 }
 
 .filelist {
-  border: 1px solid var(--color-offwhite);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .filelist__head {
@@ -292,59 +317,42 @@ async function submit() {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--color-offwhite);
-  background: var(--color-lightgray);
-}
-
-.filelist__clear {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-error);
-}
-
-.filelist__clear:hover,
-.filelist__action:hover {
-  text-decoration: underline;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-alt);
 }
 
 .filelist__actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 6px;
 }
 
-.filelist__action {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-main);
+.filelist__action,
+.filelist__clear {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
 }
 
-.filelist__move {
-  background: none;
-  border: none;
-  padding: 4px;
-  color: var(--color-gray);
-  line-height: 1;
+.filelist__action:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: var(--surface-hover);
 }
 
-.filelist__move:hover:not(:disabled) {
-  color: var(--color-primary);
-}
-
-.filelist__move:disabled {
-  opacity: 0.3;
-  cursor: default;
+.filelist__clear:hover {
+  color: var(--red);
+  border-color: var(--red-line);
+  background: var(--red-veil);
 }
 
 .filelist__items {
@@ -359,10 +367,15 @@ async function submit() {
 .filelist__items li {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 18px;
+  gap: 10px;
+  padding: 8px 12px 8px 16px;
   font-size: 0.88rem;
-  border-bottom: 1px solid var(--color-lightgray);
+  border-bottom: 1px solid var(--line);
+  transition: background var(--transition);
+}
+
+.filelist__items li:hover {
+  background: var(--surface-hover);
 }
 
 .filelist__items li:last-child {
@@ -370,8 +383,15 @@ async function submit() {
 }
 
 .filelist__index {
-  min-width: 26px;
-  color: var(--text-color-secondary);
+  min-width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
 
@@ -382,16 +402,35 @@ async function submit() {
   white-space: nowrap;
 }
 
+.filelist__move,
 .filelist__remove {
-  background: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
   border: none;
-  padding: 4px;
-  color: var(--color-gray);
+  border-radius: 50%;
+  background: none;
+  color: var(--text-faint);
   line-height: 1;
+  transition:
+    color var(--transition),
+    background var(--transition);
+}
+
+.filelist__move:hover:not(:disabled) {
+  color: var(--green-bright);
+  background: var(--green-veil);
+}
+
+.filelist__move:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 .filelist__remove:hover {
-  color: var(--color-error);
+  color: var(--red);
+  background: var(--red-veil);
 }
 
 .upload__title {
@@ -405,18 +444,23 @@ async function submit() {
 .upload__actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px 20px;
   flex-wrap: wrap;
 }
 
 .upload__note {
   margin: 0;
   font-size: 0.82rem;
+  color: var(--text-faint);
 }
 
 @media (max-width: 700px) {
   .upload {
-    padding: 26px 20px;
+    padding: 22px 18px;
+  }
+
+  .dropzone {
+    padding: 28px 16px;
   }
 }
 </style>

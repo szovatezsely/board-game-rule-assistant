@@ -13,8 +13,12 @@ import '@fontsource/inter/latin-500.css'
 import '@fontsource/inter/latin-ext-500.css'
 import '@fontsource/inter/latin-600.css'
 import '@fontsource/inter/latin-ext-600.css'
-import '@fontsource/roboto-slab/latin-500.css'
-import '@fontsource/roboto-slab/latin-ext-500.css'
+// Roboto Slab only in the light cuts the dark design uses: 300 for display
+// headings, 400 for the wordmark and section titles.
+import '@fontsource/roboto-slab/latin-300.css'
+import '@fontsource/roboto-slab/latin-ext-300.css'
+import '@fontsource/roboto-slab/latin-400.css'
+import '@fontsource/roboto-slab/latin-ext-400.css'
 import './assets/styles/main.css'
 
 import App from './App.vue'

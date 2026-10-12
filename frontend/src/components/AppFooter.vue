@@ -2,43 +2,48 @@
   <footer class="footer">
     <div class="container footer__inner">
       <p class="footer__text">
-        Társasjáték-szabály asszisztens — a válaszok kizárólag a feltöltött
-        szabálykönyv tartalmára támaszkodnak.
+        <span class="footer__brand">szabály asszisztens<span class="footer__dot">.</span></span>
+        A válaszok kizárólag a feltöltött szabálykönyv tartalmára támaszkodnak.
       </p>
-      <p class="footer__meta">
-        A szabálykönyv marad a végső döntőbíró.
-      </p>
+      <p class="footer__meta">A szabálykönyv marad a végső döntőbíró.</p>
     </div>
   </footer>
 </template>
 
 <style scoped>
 .footer {
-  border-top: 1px solid var(--color-offwhite);
-  padding: 40px 0;
-  margin-top: var(--section-padding-half);
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  padding: 30px 0 40px;
+  margin-top: 72px;
 }
 
 .footer__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 12px 24px;
   flex-wrap: wrap;
 }
 
 .footer__text,
 .footer__meta {
   margin: 0;
-  font-size: 0.85rem;
-  color: var(--text-color-secondary);
+  font-size: 0.84rem;
+  color: var(--text-dim);
 }
 
-.footer__link {
-  color: var(--color-main);
+.footer__brand {
+  font-family: var(--font-display);
+  color: var(--text);
+  margin-right: 10px;
 }
 
-.footer__link:hover {
-  text-decoration: underline;
+.footer__dot {
+  color: var(--green);
+}
+
+.footer__meta {
+  color: var(--text-faint);
 }
 </style>

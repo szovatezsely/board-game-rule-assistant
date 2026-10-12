@@ -1,55 +1,63 @@
 /*
  * Design system.
  *
- * A light, editorial look: white ground, near-black text, sharp corners,
- * generous whitespace, and small uppercase labels in green doing the accent
- * work. Green #00c95b is the primary and teal #20a575 carries links and
- * secondary accents. Inter sets body copy at 18px/1.56, with Roboto Slab
- * reserved for display type, and sections breathe on a 128px rhythm.
+ * Dark and high-contrast, shared with Clue Trainer: a near-black ground,
+ * layered charcoal surfaces separated by hairlines, a single green accent,
+ * light Roboto Slab display type over Inter body copy, and pill-shaped
+ * buttons. Every colour lives in the tokens below.
  */
 
 :root {
-  /* Brand */
-  --color-primary: #00c95b;
-  --color-main: #20a575;
-  --color-primary-soft: rgba(0, 201, 91, 0.1);
+  color-scheme: dark;
 
-  /* Neutrals */
-  --color-white: #ffffff;
-  --color-offwhite: #e9e9e9;
-  --color-lightgray: #f5f6f7;
-  --color-mediumgray: #c5c5c5;
-  --color-gray: #737373;
-  --color-darkgray: #1f1f1f;
-  --color-black: #000000;
-  --color-error: #eb5757;
-  --color-warning: #e8a33d;
+  /* Accent */
+  --green: #00c95b;
+  --green-bright: #3ee183;
+  --green-ink: #002e1d;
+  --green-veil: rgba(0, 201, 91, 0.14);
+  --green-line: rgba(0, 201, 91, 0.4);
 
-  --bg-color-primary: var(--color-white);
-  --bg-color-placeholder: var(--color-lightgray);
-  --text-color-primary: var(--color-black);
-  --text-color-secondary: var(--color-gray);
+  /* Ground and surfaces, from back to front */
+  --bg: #0a0a0b;
+  --surface: #131316;
+  --surface-alt: #1a1a1e;
+  --surface-hover: #202026;
+  --line: #2b2b31;
+  --line-strong: #45454e;
+
+  /* Text */
+  --text: #f4f4f5;
+  --text-dim: #a1a1aa;
+  --text-faint: #71717a;
+
+  /* Feedback */
+  --red: #ff6b6b;
+  --red-veil: rgba(255, 107, 107, 0.13);
+  --red-line: rgba(255, 107, 107, 0.35);
+  --amber: #f5b84a;
+  --amber-veil: rgba(245, 184, 74, 0.12);
+  --amber-line: rgba(245, 184, 74, 0.35);
 
   /* Type */
-  --font-family-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-family-serif: 'Roboto Slab', Georgia, Cambria, serif;
-  --font-size: 18px;
-  --line-height: 1.56;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Roboto Slab', Georgia, Cambria, 'Times New Roman', serif;
 
-  /* Rhythm */
-  --header-height: 100px;
-  --section-padding: 128px;
-  --section-padding-half: calc(var(--section-padding) / 2);
-  --content-max: 1320px;
-  --gutter: 40px;
+  /* Shape and motion */
+  --radius: 6px;
+  --radius-lg: 12px;
+  --shadow: 0 24px 50px -30px rgba(0, 0, 0, 0.95);
+  --transition: 160ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  --header-height: 72px;
+  --content-max: 1240px;
+  --gutter: 32px;
 }
 
 @media (max-width: 900px) {
   :root {
-    --section-padding: 72px;
-    --header-height: 76px;
-    --gutter: 20px;
-    --font-size: 17px;
+    --header-height: 64px;
+    --gutter: 18px;
   }
 }
 
@@ -61,17 +69,44 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--text-color-primary);
-  background: var(--bg-color-primary);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--green);
+  color: var(--green-ink);
+}
+
+/* Thin, dark scrollbars so long chats and lists do not flash a white gutter. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 h1,
@@ -101,9 +136,37 @@ img {
 }
 
 button {
-  font-family: inherit;
-  font-size: inherit;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
+}
+
+code {
+  font-size: 0.88em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+}
+
+kbd {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  background: var(--surface-alt);
+  border-radius: 5px;
+  padding: 1px 6px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Visible focus ring for keyboard users, suppressed for mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
 }
 
 /* ---------------------------------------------------------------- layout */
@@ -115,160 +178,188 @@ button {
   padding: 0 var(--gutter);
 }
 
-.section {
-  padding: var(--section-padding-half) 0;
-}
-
 /* ---------------------------------------------------------------- type */
 
 /*
- * Display ramp. The top step is deliberately restrained — a hero heading that
- * shouts crowds out the copy underneath it, which is the part that actually
- * explains the app. Each step below stays clearly smaller than the one above so
- * the hierarchy survives; see also `.prose h1, .prose h2`, which must sit below
- * `.display--sm` because panel titles use that step.
+ * Display ramp: thin slab-serif type, as on Clue Trainer. Weight does the
+ * opposite of what one might expect here: at this size a light cut reads as
+ * confident, a heavy one as shouting.
  */
 .display {
-  font-family: var(--font-family-serif);
-  font-weight: 500;
-  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-  line-height: 1.14;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
 .display--sm {
-  font-family: var(--font-family-serif);
-  font-weight: 500;
-  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.25rem, 2.1vw, 1.6rem);
   line-height: 1.2;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
 }
 
-/* Small uppercase green label — the site's signature accent. */
+/* Small uppercase label above a heading. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  margin: 0;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-main);
+  color: var(--text-faint);
 }
 
-.eyebrow::before {
+/* The accent variant marks the one label per screen that leads the page. */
+.eyebrow--accent {
+  color: var(--green);
+}
+
+.eyebrow--accent::before {
   content: '';
-  width: 28px;
+  width: 22px;
   height: 1px;
-  background: var(--color-primary);
-}
-
-.eyebrow--plain::before {
-  display: none;
+  background: currentColor;
 }
 
 .lead {
-  font-size: 1.16rem;
-  color: var(--text-color-secondary);
-  max-width: 62ch;
+  font-size: 1.06rem;
+  color: var(--text-dim);
+  max-width: 64ch;
 }
 
 .muted {
-  color: var(--text-color-secondary);
+  color: var(--text-dim);
+}
+
+.accent {
+  color: var(--green);
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
-  height: 27px;
-  padding: 0 10px;
-  font-size: 12px;
+  gap: 6px;
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.74rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-color-secondary);
-  border: 1px solid var(--color-offwhite);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.link {
+  color: var(--text);
+  border-bottom: 1px solid var(--green);
+  transition: color var(--transition);
+}
+
+.link:hover {
+  color: var(--green-bright);
 }
 
 /* ---------------------------------------------------------------- buttons */
 
+/*
+ * Pills. The default button is light on dark and turns green on hover; the
+ * accent variant is green from the start and marks the one action a screen
+ * is built around.
+ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 15px 30px;
+  gap: 9px;
+  padding: 11px 24px;
   border: 1px solid transparent;
-  border-radius: 0;
-  font-size: 14px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
   white-space: nowrap;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    opacity var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--green);
+  color: var(--green-ink);
+  transform: translateY(-1px);
 }
 
 .btn--primary {
-  background: var(--color-primary);
-  color: var(--color-black);
+  background: var(--green);
+  color: var(--green-ink);
 }
 
 .btn--primary:hover:not(:disabled) {
-  background: var(--color-main);
-  color: var(--color-white);
-}
-
-.btn--dark {
-  background: var(--color-darkgray);
-  color: var(--color-white);
-}
-
-.btn--dark:hover:not(:disabled) {
-  background: var(--color-black);
+  background: var(--green-bright);
+  color: var(--green-ink);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--text-color-primary);
-  border-color: var(--color-mediumgray);
+  color: var(--text);
+  border-color: var(--line);
+  font-weight: 500;
 }
 
 .btn--ghost:hover:not(:disabled) {
-  border-color: var(--color-black);
+  background: var(--surface-hover);
+  border-color: var(--line-strong);
+  color: var(--text);
+  transform: none;
 }
 
 .btn--danger {
   background: transparent;
-  color: var(--color-error);
-  border-color: rgba(235, 87, 87, 0.4);
+  color: var(--red);
+  border-color: var(--red-line);
+  font-weight: 500;
 }
 
 .btn--danger:hover:not(:disabled) {
-  background: var(--color-error);
-  color: var(--color-white);
-  border-color: var(--color-error);
+  background: var(--red-veil);
+  border-color: var(--red);
+  color: var(--red);
+  transform: none;
 }
 
 .btn--sm {
-  padding: 10px 18px;
-  font-size: 12px;
+  padding: 8px 16px;
+  font-size: 0.84rem;
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.38;
   cursor: not-allowed;
 }
 
 /* ---------------------------------------------------------------- surfaces */
 
 .panel {
-  background: var(--color-white);
-  border: 1px solid var(--color-offwhite);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
 }
 
+/* A quieter surface for status blocks that sit between panels. */
 .panel--flat {
-  background: var(--color-lightgray);
-  border: none;
+  background: var(--surface-alt);
 }
 
 /* ---------------------------------------------------------------- forms */
@@ -281,79 +372,104 @@ button {
 .field__label {
   display: block;
   margin-bottom: 8px;
-  font-size: 13px;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-color-secondary);
+  color: var(--text-faint);
 }
 
 .field__hint {
+  display: block;
   margin-top: 8px;
-  font-size: 0.85rem;
-  color: var(--text-color-secondary);
+  font-size: 0.82rem;
+  color: var(--text-faint);
 }
 
 .input,
 .textarea {
   width: 100%;
-  padding: 14px 16px;
+  padding: 12px 15px;
   font-family: inherit;
-  font-size: 1rem;
-  color: var(--text-color-primary);
-  background: var(--color-white);
-  border: 1px solid var(--color-mediumgray);
-  border-radius: 0;
-  transition: border-color 0.2s ease;
+  font-size: 0.96rem;
+  color: var(--text);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition:
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.input:hover:not(:disabled),
+.textarea:hover:not(:disabled) {
+  border-color: var(--line-strong);
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--green);
+  background: var(--surface);
+}
+
+.input:disabled,
+.textarea:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .textarea {
   resize: vertical;
-  min-height: 56px;
+  min-height: 52px;
   line-height: 1.5;
-}
-
-/* Visible focus ring for keyboard users, suppressed for mouse clicks. */
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
 }
 
 /* ---------------------------------------------------------------- feedback */
 
 .alert {
-  padding: 16px 20px;
-  border-left: 3px solid var(--color-mediumgray);
-  background: var(--color-lightgray);
-  font-size: 0.95rem;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  color: var(--text-dim);
+  font-size: 0.92rem;
+}
+
+.alert strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .alert--error {
-  border-left-color: var(--color-error);
-  background: rgba(235, 87, 87, 0.07);
+  border-color: var(--red-line);
+  border-left-color: var(--red);
+  background: var(--red-veil);
 }
 
 .alert--warning {
-  border-left-color: var(--color-warning);
-  background: rgba(232, 163, 61, 0.09);
+  border-color: var(--amber-line);
+  border-left-color: var(--amber);
+  background: var(--amber-veil);
 }
 
 .alert--info {
-  border-left-color: var(--color-primary);
-  background: var(--color-primary-soft);
+  border-color: var(--green-line);
+  border-left-color: var(--green);
+  background: var(--green-veil);
 }
 
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid var(--color-mediumgray);
-  border-top-color: var(--color-primary);
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--green);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex: none;
@@ -372,7 +488,9 @@ button {
  * model-generated Markdown, sanitised before it is inserted.
  */
 .prose {
-  font-size: 1rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-dim);
 }
 
 .prose > :first-child {
@@ -385,20 +503,34 @@ button {
 
 .prose h1,
 .prose h2 {
-  font-family: var(--font-family-serif);
+  font-family: var(--font-display);
   /* Below .display--sm: these are headings inside a panel whose own title
      already uses that step. */
-  font-size: 1.12rem;
-  font-weight: 500;
-  margin: 2em 0 0.6em;
-  padding-bottom: 0.35em;
-  border-bottom: 1px solid var(--color-offwhite);
+  font-size: 1.16rem;
+  font-weight: 400;
+  color: var(--text);
+  margin: 2em 0 0.7em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* A short green tick in front of each section heading, as a reading anchor. */
+.prose h1::before,
+.prose h2::before {
+  content: '';
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--green);
+  flex: none;
 }
 
 .prose h3,
 .prose h4 {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 600;
+  color: var(--text);
   margin: 1.6em 0 0.5em;
 }
 
@@ -416,40 +548,45 @@ button {
   margin-bottom: 0.4em;
 }
 
+.prose li::marker {
+  color: var(--text-faint);
+}
+
 .prose strong {
   font-weight: 600;
+  color: var(--text);
+}
+
+.prose a {
+  color: var(--text);
+  border-bottom: 1px solid var(--green);
 }
 
 .prose blockquote {
   margin: 0 0 1em;
-  padding: 2px 0 2px 18px;
-  border-left: 3px solid var(--color-primary);
-  color: var(--text-color-secondary);
+  padding: 2px 0 2px 16px;
+  border-left: 2px solid var(--green);
+  color: var(--text-dim);
   font-style: italic;
-}
-
-.prose code {
-  font-size: 0.9em;
-  padding: 2px 5px;
-  background: var(--color-lightgray);
 }
 
 .prose table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1em;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .prose th,
 .prose td {
   padding: 8px 10px;
-  border: 1px solid var(--color-offwhite);
+  border: 1px solid var(--line);
   text-align: left;
 }
 
 .prose th {
-  background: var(--color-lightgray);
+  background: var(--surface-alt);
+  color: var(--text);
   font-weight: 600;
 }
 
